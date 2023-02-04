@@ -8,8 +8,9 @@ import subprocess
 
 
 def run():
+    today = time.strftime("%Y-%m-%d", time.localtime())
 
-    with open('/Users/mach/projects/last-commit.txt', 'w+') as f:
+    with open('/Users/mach/projects/forflag/last-commit.txt', 'r+') as f:
         text = f.read()
         text_list = text.split('|')
         date = text_list[0]
@@ -27,7 +28,6 @@ def run():
           stdout = subprocess.PIPE,
           stdin = subprocess.PIPE)
 
-        today = time.strftime("%Y-%m-%d", time.localtime())
         if ret.returncode == 0:
             f.write(f"{today}|1")
         else:
