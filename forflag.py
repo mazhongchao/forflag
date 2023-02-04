@@ -11,7 +11,7 @@ def run():
     today = time.strftime("%Y-%m-%d", time.localtime())
     now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
-    with open('/Users/mach/projects/forflag/last-commit1.txt', 'r+') as f:
+    with open('/Users/mach/projects/forflag/last-commit.txt', 'r+') as f:
         text = f.read()
         f.seek(0)
 
