@@ -9,9 +9,12 @@ import subprocess
 
 def run():
     today = time.strftime("%Y-%m-%d", time.localtime())
+    now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
-    with open('/Users/mach/projects/forflag/last-commit.txt', 'r+') as f:
+    with open('/Users/mach/projects/forflag/last-commit1.txt', 'r+') as f:
         text = f.read()
+        f.seek(0)
+
         text_list = text.split('|')
         date = text_list[0]
         stat = text_list[1]
@@ -19,19 +22,27 @@ def run():
         if date == today and stat == '1':
             return
 
-        cmd_list = ["git add .", "git commit -m 'update'", 'git push origin main']
+        with open('/Users/mach/projects/forflag/README.md', 'a+') as ff:
+            ff.write(f"{now} commit\n")
 
-        # ret是类subprocess.CompletedProcess对象(args, returncode(0=成功), stdout子进程输出, stderr,check_returncode()
-        ret = subprocess.run(cmd_list,
-          shell = True,
-          timeout = 10,
-          stdout = subprocess.PIPE,
-          stdin = subprocess.PIPE)
+        cmd_list = ["cd /Users/mach/projects/forflag",
+                    "git add README.md",
+                    "git commit -m 'update'",
+                    'git push origin main']
 
-        if ret.returncode == 0:
-            f.write(f"{today}|1")
-        else:
-            f.write(f"{today}|0")
+        # ret是类subprocess.CompletedProcess对象:
+        # (args, returncode(0=成功), stdout子进程的输出, stderr子进程错误, check_returncode())
+        for idx, cmd in enumerate(cmd_list):
+            ret = subprocess.run(cmd,
+              shell = True,
+              timeout = 10,
+              stdout = subprocess.PIPE,
+              stdin = subprocess.PIPE)
+            print(ret.stdout, ret.stderr)
+
+            if idx == (len(cmd_list) - 1) and ret.returncode == 0:
+                f.truncate()
+                f.write(f"{today}|1")
 
 
 if __name__ == "__main__":
