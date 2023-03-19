@@ -31,13 +31,12 @@ def run():
 
             if event['type'] == "PushEvent":
                 create_date = event['created_at'].split('T')[0]
-                readme_text = f'Last push at {create_date}, need to push: '
-                #if create_date == today:
-                #    return
-                #else:
-                #    readme_text = f'Last push at {create_date}, need to push: '
-                    # print(f'last push at {create_date}, need to push')
-                    # exit(0)
+                if create_date == today:
+                   return
+                else:
+                   readme_text = f'Last push at {create_date}, need to push: '
+                    print(f'last push at {create_date}, need to push')
+                    exit(0)
 
     now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
