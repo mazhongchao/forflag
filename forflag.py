@@ -11,7 +11,7 @@ def run():
     today = time.strftime("%Y-%m-%d", time.localtime())
     now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
-    with open('/Users/mach/projects/forflag/last-commit.txt', 'r+') as f:
+    with open('/data/projects/testflag/last-commit.txt', 'r+') as f:
         text = f.read()
         f.seek(0)
 
@@ -22,10 +22,10 @@ def run():
         if date == today and stat == '1':
             return
 
-        with open('/Users/mach/projects/forflag/README.md', 'a+') as ff:
+        with open('/data/projects/testflag/README.md', 'a+') as ff:
             ff.write(f"{now} commit\n")
 
-        cmd_list = ["cd /Users/mach/projects/forflag",
+        cmd_list = ["cd /data/projects/testflag/forflag",
                     "git add README.md",
                     "git commit -m 'update'",
                     'git push origin main']
