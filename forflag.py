@@ -17,12 +17,12 @@ def run():
 
     today = time.strftime("%Y-%m-%d", time.localtime())
 
-    git_api = "https://api.github.com/users/mazhongchao/events?page=1&per_page=10"
+    github_api = "https://api.github.com/users/mazhongchao/events?page=1&per_page=10"
 
     readme_text = ""
     #ssl._create_default_https_context = ssl._create_unverified_context
     context = ssl._create_unverified_context()
-    with request.urlopen(git_api, context=context) as r:
+    with request.urlopen(github_api, context=context) as r:
         data = r.read()
 
         # print('Data:', (json.loads(data.decode('utf-8'))))
