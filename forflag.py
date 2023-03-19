@@ -17,26 +17,33 @@ def run():
 
     today = time.strftime("%Y-%m-%d", time.localtime())
 
-    github_api = "https://api.github.com/users/mazhongchao/events?page=1&per_page=10"
+    github_api = "https://api.github.com/users/mazhongchao/events?page=1&per_page=30"
 
     readme_text = ""
+
     #ssl._create_default_https_context = ssl._create_unverified_context
     context = ssl._create_unverified_context()
     with request.urlopen(github_api, context=context) as r:
         data = r.read()
 
-        # print('Data:', (json.loads(data.decode('utf-8'))))
         data_list = json.loads(data.decode('utf-8'))
+
+        has_flag = False
         for event in data_list:
 
             if event['type'] == "PushEvent":
+
                 create_date = event['created_at'].split('T')[0]
                 if create_date == today:
-                   return
+                    print(f'Already pushed at {create_date}.')
+                    has_flag = True
+                    break
                 else:
-                   readme_text = f'Last push at {create_date}, need to push: '
-                    print(f'last push at {create_date}, need to push')
-                    exit(0)
+                    readme_text = f'Last push at {create_date}, need to push: '
+                    print(f'Last push at {create_date}, need to push')
+
+        if has_flag:
+            return
 
     now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
