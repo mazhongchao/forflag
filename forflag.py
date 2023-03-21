@@ -15,7 +15,8 @@ from setting import baseurl
 
 def run():
 
-    today = time.strftime("%Y-%m-%d", time.localtime())
+    now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    today_date = now.split(' ')[0]
 
     github_api = "https://api.github.com/users/mazhongchao/events?page=1&per_page=30"
 
@@ -34,18 +35,17 @@ def run():
             if event['type'] == "PushEvent":
 
                 create_date = event['created_at'].split('T')[0]
-                if create_date == today:
-                    print(f'Already pushed at {create_date}.')
+                if create_date == today_date:
+                    print(f'[{now}] Already pushed at {create_date}.')
                     has_flag = True
-                    break
                 else:
-                    readme_text = f'Last push at {create_date}, need to push: '
+                    readme_text = f'Last push at {create_date}, need to push. '
                     print(f'Last push at {create_date}, need to push')
+
+                break
 
         if has_flag:
             return
-
-    now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     # This file will work when the repository is private,
     # in which case the GITHUB-API will not provide related events.
@@ -57,11 +57,11 @@ def run():
         date = text_list[0]
         stat = text_list[1]
 
-        if date == today and stat == '1':
+        if date == today_date and stat == '1':
             return
 
         with open(f'{baseurl}/log.txt', 'a+') as ff:
-            ff.write(f"{readme_text}{now} commit.\n")
+            ff.write(f"{readme_text}Commits at {now}.\n")
 
         cmd_list = [f"cd {baseurl}",
                     "git add log.txt",
@@ -80,7 +80,7 @@ def run():
 
             if idx == (len(cmd_list) - 1) and ret.returncode == 0:
                 f.truncate()
-                f.write(f"{today}|1")
+                f.write(f"{today_date}|1")
 
 
 if __name__ == "__main__":
