@@ -22,7 +22,7 @@ def run():
 
     readme_text = ""
 
-    #ssl._create_default_https_context = ssl._create_unverified_context
+    ssl._create_default_https_context = ssl._create_unverified_context
     context = ssl._create_unverified_context()
     with request.urlopen(github_api, context=context) as r:
         data = r.read()
@@ -39,8 +39,8 @@ def run():
                     print(f'[{now}] Already pushed at {create_date}.')
                     has_flag = True
                 else:
-                    readme_text = f'Last push at {create_date}, need to push. '
-                    print(f'Last push at {create_date}, need to push')
+                    readme_text = f'[{now}] Last push at {create_date}, need to push. '
+                    print(f'[{now}] Last push at {create_date}, need to push')
 
                 break
 
@@ -58,13 +58,14 @@ def run():
         stat = text_list[1]
 
         if date == today_date and stat == '1':
+            print(f'[{now}] Already pushed at {create_date}.')
             return
 
         with open(f'{baseurl}/log.txt', 'a+') as ff:
             ff.write(f"{readme_text}Commits at {now}.\n")
 
-        cmd_list = [f"cd {baseurl}",
-                    "git add log.txt",
+        os.chdir(f"{baseurl}")
+        cmd_list = ["git add log.txt",
                     "git commit -m 'update log'",
                     "git push origin main"]
 
@@ -76,11 +77,14 @@ def run():
               timeout = 10,
               stdout = subprocess.PIPE,
               stdin = subprocess.PIPE)
-            print(ret.stdout, ret.stderr)
+            print(ret.stdout, ret.stderr, ret.returncode)
 
-            if idx == (len(cmd_list) - 1) and ret.returncode == 0:
+            if idx == (len(cmd_list) - 1):
                 f.truncate()
-                f.write(f"{today_date}|1")
+                if ret.returncode == 0:
+                    f.write(f"{today_date}|1")
+                else:
+                    f.write(f"{today_date}|0")
 
 
 if __name__ == "__main__":
