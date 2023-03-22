@@ -22,7 +22,7 @@ def run():
 
     readme_text = ""
 
-    ssl._create_default_https_context = ssl._create_unverified_context
+    # ssl._create_default_https_context = ssl._create_unverified_context
     context = ssl._create_unverified_context()
     with request.urlopen(github_api, context=context) as r:
         data = r.read()
