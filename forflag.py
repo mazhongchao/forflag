@@ -40,7 +40,7 @@ def run():
                     has_flag = True
                 else:
                     readme_text = f'[{now}] Last push at {create_date}, need to push. '
-                    print(f'[{now}] Last push at {create_date}, need to push')
+                    print(f'[{now}] Last push at {create_date}, need to push.')
 
                 break
 
